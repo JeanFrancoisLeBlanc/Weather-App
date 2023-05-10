@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnGetWeather').click(function () {
+                var resultElement = $('#resultDiv');
+
+                
+                var cityName = $('#txtCity').val();
+                var countryName = $('#txtCountry').val();
+                var apiKey = '1e076ed2af3844eb3b7a484c61aabbc6'; // replace with your OpenWeatherMap API key
+
+                var url = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + ',' + countryName + '&appid=' + apiKey + '&units=imperial';
+
+
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        var temp = response.main.temp;
+                        resultElement.html('Weather: ' + response.weather[0].main + '<br/>'
+                                + 'Description: ' + response.weather[0].description + '<br/>' + 'Temperature: ' + temp);
+                                
+                                if (temp <= 50) {
+                                    $('body').css('background-color', 'lightblue');
+                                } else if (temp > 50) {
+                                    $('body').css('background-color', 'yellow');
+                                }
+                    },
+                    error: function (err) {
+                        resultElement.html('An error occurred while retrieving weather data.');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body style="font-family:Arial">
+    <div id="resultDiv">
+    </div>
+    <table>
+        <tr>
+            <td>City</td>
+            <td><input type="text" id="txtCity" /></td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td><input type="text" id="txtCountry" /></td>
+        </tr>
+    </table>
+    <input type="button" id="btnGetWeather" value="Get Weather Data">
+    <br /><br />
+
+</body>
+</html>
